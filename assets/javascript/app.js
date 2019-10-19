@@ -5,7 +5,7 @@ $("#searchButton").on("click", function(event){
     event.preventDefault();
 
     var term = $("#searchTerm").val().trim();
-    // var numRecords = $("#numRecords").val().trim();
+    var numRecords = $("#numRecords").val().trim();
     var startYear = $("#startYear").val().trim();
     var endYear = $("#endYear").val().trim();
     var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+term+
@@ -24,8 +24,18 @@ $("#searchButton").on("click", function(event){
         url: queryURL,
         method: "GET",
     }).then(function(r){
-        console.log(r)
-        // $("#displayResults").
+        console.log(r.response.docs)
+        for (var i =0; i < numRecords-1; i++){
+            console.log(numRecords);
+            var articleDiv = $("<div>");
+            articleDiv.attr("class", "article");
+            articleDiv.attr("id", r.response.docs[i].headline.main);
+            articleDiv.text(r.response.docs[i].headline.main);
+            var snippet = $("<p>")
+            snippet.text(r.response.docs[i].snippet)
+            articleDiv.append(snippet);
+            $("#displayResults").append(articleDiv);
+        };
     })
 })
 
